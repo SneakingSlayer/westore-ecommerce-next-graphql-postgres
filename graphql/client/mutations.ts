@@ -16,6 +16,16 @@ mutation Mutation {
 `;
 };
 
+export const SIGN_OUT = gql`
+  mutation Mutation {
+    logout {
+      username
+      password
+      token
+    }
+  }
+`;
+
 export const SIGN_UP = (
   email: String,
   lastname: String,

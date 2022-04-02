@@ -2,10 +2,13 @@ import React from "react";
 import { useRouter } from "next/router";
 import { BiShoppingBag } from "react-icons/bi";
 import styles from "./card.module.css";
-import { gql, useMutation } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import { useContext } from "react";
 import { GlobalContext } from "../../context/GlobalState";
-import { GET_ALL_CART_ITEMS } from "../../../graphql/client/queries";
+import {
+  GET_ALL_CART_ITEMS,
+  AUTHENTICATION,
+} from "../../../graphql/client/queries";
 interface propTypes {
   id: String;
   title: String;
@@ -31,13 +34,15 @@ export const Card = (props: propTypes) => {
     }
   `;
 
-  const [addToCartMutation, { data, loading, error }] = useMutation(AddToCart, {
+  const [addToCartMutation] = useMutation(AddToCart, {
     refetchQueries: [
       {
         query: GET_ALL_CART_ITEMS,
       },
     ],
   });
+
+  const { data, loading, error } = useQuery(AUTHENTICATION);
 
   return (
     <div
@@ -68,6 +73,10 @@ export const Card = (props: propTypes) => {
           className="font-bold flex text-indigo-600"
           onClick={(e) => {
             e.preventDefault();
+            if (error) {
+              router.push("/signin");
+              return;
+            }
             addToCartMutation();
             setToast();
           }}

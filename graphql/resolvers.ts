@@ -27,6 +27,7 @@ export const resolvers = {
         return e;
       }
     },
+
     products: async (_parent: any, _args: any, context: any) => {
       const products = await context.prisma.product.findMany({
         include: {
@@ -206,6 +207,25 @@ export const resolvers = {
       } finally {
         prisma.$disconnect();
       }
+    },
+    logout: async (_parent: any, _args: any, context: any) => {
+      await context.setCookies.push({
+        name: "token",
+        value: "",
+        options: {
+          maxAge: 0,
+          expires: new Date(Date.now()),
+          httpOnly: true,
+          path: "/",
+          sameSite: "lax",
+        },
+      });
+
+      return {
+        username: null,
+        password: null,
+        token: null,
+      };
     },
     addToCart: async (_parent: any, _args: any, context: any) => {
       try {

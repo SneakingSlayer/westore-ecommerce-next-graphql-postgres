@@ -5,9 +5,13 @@ import { HiMenuAlt3 } from "react-icons/hi";
 import { IoSearch } from "react-icons/io5";
 import { Cart } from "../cart/Cart";
 import Link from "next/link";
-import { gql, useQuery } from "@apollo/client";
+import { gql, useQuery, useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
 import styles from "./navbar.module.css";
+import { FaSignOutAlt } from "react-icons/fa";
+import { AUTHENTICATION } from "../../../graphql/client/queries";
+import { SIGN_OUT } from "../../../graphql/client/mutations";
+
 export const Navbar = () => {
   const router = useRouter();
   const [menu, setMenu] = useState<boolean>(false);
@@ -27,24 +31,21 @@ export const Navbar = () => {
     setDrawer(true);
   };
 
-  const Auth = gql`
-    query Auth {
-      auth {
-        token
-      }
-      cart {
-        id
-      }
-    }
-  `;
-
-  const { data, loading, error } = useQuery(Auth);
+  const { data, loading, error } = useQuery(AUTHENTICATION);
 
   const handleSearch = (e: any) => {
     e.preventDefault();
     if (search === "") return;
     router.push(`/search/${search}`);
   };
+
+  const [logoutMutation] = useMutation(SIGN_OUT, {
+    refetchQueries: [
+      {
+        query: AUTHENTICATION,
+      },
+    ],
+  });
 
   return (
     <nav className="w-100 ">
@@ -72,17 +73,23 @@ export const Navbar = () => {
           </form>
         </div>
         {!error ? (
-          <div className="nav-cta flex ">
+          <div className="nav-cta flex items-center">
             <button className="mr-2 relative " onClick={handleOpenDrawer}>
-              <BiShoppingBag fontSize={28} />
+              <BiShoppingBag fontSize={28} className="text-slate-700" />
               {loading ? null : data.cart.length > 0 ? (
                 <div className={styles.notificationBadge}>
                   {data.cart.length}
                 </div>
               ) : null}
             </button>
-            <button className="md:block hidden ml-2">
-              <FaRegUserCircle fontSize={26} />
+            <button
+              onClick={async () => {
+                await logoutMutation();
+                window.location.href = "/signin";
+              }}
+              className="md:block hidden ml-1"
+            >
+              <FaSignOutAlt fontSize={26} className="text-slate-700" />
             </button>
             <button
               className="md:hidden block border border-gray-300 rounded p-1 ml-2 focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
@@ -104,7 +111,7 @@ export const Navbar = () => {
         <div className="container pl-4 pr-4">
           <div className="search-wrapper w-full relative">
             <IoSearch
-              className="absolute left-3 top-2.5"
+              className="absolute top-3 left-6  md:left-3 md:top-2.5"
               color="#bbb"
               fontSize={20}
             />

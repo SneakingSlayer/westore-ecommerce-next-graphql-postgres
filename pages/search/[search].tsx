@@ -8,7 +8,15 @@ const Search = ({ data }: any) => {
     <Layout>
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-black text-indigo-600">Search Results</h1>
-        <p className="text-sm text-slate-400">Showing 9 results</p>
+        {!data ? (
+          <p className="text-sm text-slate-400">loading...</p>
+        ) : data.search.length > 0 ? (
+          <p className="text-sm text-slate-400">
+            Showing {data.search.length} results
+          </p>
+        ) : (
+          <p className="text-sm text-slate-400">Showing 0 results</p>
+        )}
       </div>
 
       {!data ? (
