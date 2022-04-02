@@ -3,6 +3,8 @@ import { CgTrash } from "react-icons/cg";
 import styles from "./cartitem.module.css";
 import { gql, useMutation } from "@apollo/client";
 import { Loader } from "../loader/Loader";
+import { GET_ALL_CART_ITEMS } from "../../../graphql/client/queries";
+import { DELETE_FROM_CART } from "../../../graphql/client/mutations";
 interface propTypes {
   id: String;
   title: String;
@@ -12,38 +14,12 @@ interface propTypes {
   quantity: String;
 }
 export const CartItem = (props: propTypes) => {
-  // console.log(props.id);
-  const DeleteFromCart = gql`
-  mutation DeleteFromCart {
-    deleteFromCart(cartId: "${props.id}") {
-      cartId
-    }
-  }
-  `;
-
   const [deleteFromCartMutation, { data, loading, error }] = useMutation(
-    DeleteFromCart,
+    DELETE_FROM_CART(props.id),
     {
       refetchQueries: [
         {
-          query: gql`
-            query Cart {
-              cart {
-                quantity
-                Product {
-                  id
-                  name
-                  price
-                  description
-                  quantity
-                  image
-                  Category {
-                    name
-                  }
-                }
-              }
-            }
-          `,
+          query: GET_ALL_CART_ITEMS,
         },
       ],
     }

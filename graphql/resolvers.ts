@@ -2,7 +2,6 @@ import prisma from "../lib/prisma";
 import jwtDecode from "jwt-decode";
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-import { serialize, parse } from "cookie";
 
 export const resolvers = {
   Query: {
@@ -28,9 +27,23 @@ export const resolvers = {
         return e;
       }
     },
-
     products: async (_parent: any, _args: any, context: any) => {
+      const products = await context.prisma.product.findMany({
+        include: {
+          Category: true,
+        },
+      });
+
+      return products;
+    },
+    latestProducts: async (_parent: any, _args: any, context: any) => {
       return await context.prisma.product.findMany({
+        take: 9,
+        orderBy: [
+          {
+            createdAt: "desc",
+          },
+        ],
         include: {
           Category: true,
         },
@@ -75,6 +88,21 @@ export const resolvers = {
         },
       });
       return cart;
+    },
+    search: async (_parent: any, _args: any, context: any) => {
+      const result = await context.prisma.product.findMany({
+        where: {
+          name: {
+            contains: _args.search,
+            mode: "insensitive",
+          },
+        },
+        include: {
+          Category: true,
+        },
+      });
+      console.log(result);
+      return result;
     },
   },
   Mutation: {

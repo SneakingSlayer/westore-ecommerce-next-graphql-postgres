@@ -3,11 +3,9 @@ import { useRouter } from "next/router";
 import { BiShoppingBag } from "react-icons/bi";
 import styles from "./card.module.css";
 import { gql, useMutation } from "@apollo/client";
-import { Toast } from "../toast/Toast";
 import { useContext } from "react";
 import { GlobalContext } from "../../context/GlobalState";
-const cookieCutter = require("cookie-cutter");
-
+import { GET_ALL_CART_ITEMS } from "../../../graphql/client/queries";
 interface propTypes {
   id: String;
   title: String;
@@ -36,24 +34,7 @@ export const Card = (props: propTypes) => {
   const [addToCartMutation, { data, loading, error }] = useMutation(AddToCart, {
     refetchQueries: [
       {
-        query: gql`
-          query Cart {
-            cart {
-              quantity
-              Product {
-                id
-                name
-                price
-                description
-                quantity
-                image
-                Category {
-                  name
-                }
-              }
-            }
-          }
-        `,
+        query: GET_ALL_CART_ITEMS,
       },
     ],
   });

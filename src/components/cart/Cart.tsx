@@ -4,32 +4,11 @@ import { CgArrowLongRight } from "react-icons/cg";
 import { CartItem } from "../cartitem/CartItem";
 import { BiShoppingBag } from "react-icons/bi";
 import { gql, useQuery } from "@apollo/client";
+import { GET_ALL_CART_ITEMS } from "../../../graphql/client/queries";
 export const Cart = (props: any) => {
   const { isOpen, setIsOpen } = props;
 
-  const Items = gql`
-    query Cart {
-      cart {
-        id
-        quantity
-        Product {
-          id
-          name
-          price
-          description
-          quantity
-          image
-          Category {
-            name
-          }
-        }
-      }
-    }
-  `;
-
-  const { data, loading, error } = useQuery(Items);
-
-  console.log(data);
+  const { data, loading, error } = useQuery(GET_ALL_CART_ITEMS);
 
   return (
     <main
@@ -62,23 +41,25 @@ export const Cart = (props: any) => {
           <div className="h-full p-7 overflow-auto">
             {loading ? (
               <p>loading</p>
-            ) : data.cart.length > 0 ? (
-              data.cart.map((item: any, idx: any) => (
-                <CartItem
-                  key={idx}
-                  id={item.id}
-                  img={item.Product.image}
-                  price={item.Product.price}
-                  title={item.Product.name}
-                  description={item.Product.description}
-                  quantity={item.quantity}
-                />
-              ))
-            ) : (
-              <p className="text-center italic text-slate-400">
-                Your cart is empty.
-              </p>
-            )}
+            ) : !error ? (
+              data.cart.length > 0 ? (
+                data.cart.map((item: any, idx: any) => (
+                  <CartItem
+                    key={idx}
+                    id={item.id}
+                    img={item.Product.image}
+                    price={item.Product.price}
+                    title={item.Product.name}
+                    description={item.Product.description}
+                    quantity={item.quantity}
+                  />
+                ))
+              ) : (
+                <p className="text-center italic text-slate-400">
+                  Your cart is empty.
+                </p>
+              )
+            ) : null}
           </div>
 
           <div className="border-t border-gray-300 p-7">

@@ -3,6 +3,7 @@ import { Layout } from "../../src/components/layout/Layout";
 import { gql, useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
 import { Loader } from "../../src/components/loader/Loader";
+import { SIGN_UP } from "../../graphql/client/mutations";
 const Signup = () => {
   const router = useRouter();
 
@@ -12,25 +13,10 @@ const Signup = () => {
   const [firstname, setFirstname] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<any>({ status: false, message: "" });
-  const Register = gql`
-    mutation Mutation {
-      register(
-        email: "${email}"
-        lastname: "${lastname}"
-        firstname: "${firstname}"
-        username: "${username}"
-        password: "${password}"
-      ) {
-        email
-        firstname
-        lastname
-        username
-        password
-      }
-    }
-  `;
 
-  const [registerMutation, { data, loading }] = useMutation(Register);
+  const [registerMutation, { data, loading }] = useMutation(
+    SIGN_UP(email, lastname, firstname, username, password)
+  );
 
   const handleRegister = (e: any) => {
     e.preventDefault();

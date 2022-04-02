@@ -8,22 +8,22 @@ type LayoutProps = {
 
 interface GlobalContextType {
   show: boolean;
-  setToast?: () => void;
+  setToast: () => void;
 }
 
 const initalState = {
   show: false,
+  setToast: () => {},
 };
 
-export const GlobalContext = createContext<GlobalContextType | null>(null);
+export const GlobalContext = createContext<GlobalContextType>(initalState);
 
-export const GlobalProvider = ({ children }: LayoutProps) => {
+export const GlobalProvider: React.FC<React.ReactNode> = ({ children }) => {
   const [state, dispatch] = useReducer(AppReducer, initalState);
 
   // Actions
-  const setToast = () => {
-    console.log("yawa");
-    dispatch({
+  const setToast = async () => {
+    await dispatch({
       type: "SHOW_TOAST",
     });
 
@@ -31,7 +31,8 @@ export const GlobalProvider = ({ children }: LayoutProps) => {
       dispatch({
         type: "HIDE_TOAST",
       });
-    }, 3000);
+    }, 1000);
+    return console.log("yawa");
   };
 
   return (

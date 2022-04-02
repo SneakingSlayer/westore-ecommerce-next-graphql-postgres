@@ -4,15 +4,13 @@ import { BiShoppingBag } from "react-icons/bi";
 import { CgClose } from "react-icons/cg";
 import FadeIn from "react-fade-in/lib/FadeIn";
 export const Toast = () => {
-  const [show, setShow] = useState<boolean>(true);
-  useEffect(() => {
-    setTimeout(() => {
-      setShow(false);
-    }, 5000);
-  }, []);
   return (
-    <FadeIn>
-      <div className="container mx-auto  flex justify-center fixed bottom-4">
+    <div className={`container mx-auto  flex justify-center fixed bottom-4`}>
+      <FadeIn
+        transitionDuration={200}
+        className="w-full max-w-xs p-4"
+        onComplete={() => console.log("bisong completed")}
+      >
         <div
           id="toast-default"
           className={
@@ -24,16 +22,17 @@ export const Toast = () => {
             <BiShoppingBag className="text-indigo-600" fontSize={24} />
           </div>
           <div className="ml-3 text-sm text-white">Item added to cart!</div>
-          <button
+          {/** <button
             type="button"
             className="ml-auto  text-white rounded-lg   "
             data-dismiss-target="#toast-default"
             aria-label="Close"
+            onClick={() => setHide("hidden")}
           >
             <CgClose className="font-bold" fontSize={21} />
-          </button>
+          </button>*/}
         </div>
-      </div>
-    </FadeIn>
+      </FadeIn>
+    </div>
   );
 };

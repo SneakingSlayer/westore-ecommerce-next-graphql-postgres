@@ -12,7 +12,8 @@ export const Navbar = () => {
   const router = useRouter();
   const [menu, setMenu] = useState<boolean>(false);
   const [drawer, setDrawer] = useState<boolean>(false);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
+  const [search, setSearch] = useState<String>("");
+
   const handleOpenMenu = () => {
     if (menu) {
       setMenu(false);
@@ -39,7 +40,11 @@ export const Navbar = () => {
 
   const { data, loading, error } = useQuery(Auth);
 
-  console.log(data);
+  const handleSearch = (e: any) => {
+    e.preventDefault();
+    if (search === "") return;
+    router.push(`/search/${search}`);
+  };
 
   return (
     <nav className="w-100 ">
@@ -58,10 +63,13 @@ export const Navbar = () => {
             color="#bbb"
             fontSize={20}
           />
-          <input
-            placeholder="What are you looking for?"
-            className=" text-sm w-11/12 ml-4 mr-4 p-3 pl-9 border border-gray-300 rounded-xl focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500 focus:outline-none"
-          />
+          <form onSubmit={handleSearch}>
+            <input
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="What are you looking for?"
+              className=" text-sm w-11/12 ml-4 mr-4 p-3 pl-9 border border-gray-300 rounded-xl focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500 focus:outline-none"
+            />
+          </form>
         </div>
         {!error ? (
           <div className="nav-cta flex ">
@@ -100,10 +108,13 @@ export const Navbar = () => {
               color="#bbb"
               fontSize={20}
             />
-            <input
-              className="w-full p-2   p-2 pl-9 border border-gray-300 rounded-xl focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500 focus:outline-none"
-              placeholder="What are you looking for?"
-            />
+            <form onSubmit={handleSearch}>
+              <input
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="What are you looking for?"
+                className=" text-sm w-11/12 ml-4 mr-4 p-3 pl-9 border border-gray-300 rounded-xl focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500 focus:outline-none"
+              />
+            </form>
           </div>
         </div>
       </div>

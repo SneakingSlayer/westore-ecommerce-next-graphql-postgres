@@ -60,9 +60,11 @@ export const typeDefs = gql`
   type Query {
     auth: Login!
     products: [Product]!
+    latestProducts: [Product]!
     categories: [Category]!
     product(id: String): Product!
     cart(userId: String, token: String): [Cart]!
+    search(search: String): [Product]!
   }
 
   type Mutation {
@@ -86,25 +88,3 @@ export const typeDefs = gql`
     deleteFromCart(userId: String, cartId: String): DeleteFromCart!
   }
 `;
-
-/**import { makeSchema } from "nexus";
-import { join } from "path";
-import * as types from "./types";
-
-export const schema = makeSchema({
-  types,
-  outputs: {
-    typegen: join(
-      process.cwd(),
-      "node_modules",
-      "@types",
-      "nexus-typegen",
-      "index.d.ts"
-    ),
-    schema: join(process.cwd(), "graphql", "schema.graphql"),
-  },
-  contextType: {
-    export: "Context",
-    module: join(process.cwd(), "graphql", "context.ts"),
-  },
-});*/

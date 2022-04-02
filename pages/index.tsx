@@ -14,12 +14,13 @@ import { useContext } from "react";
 
 import { GlobalContext } from "../src/context/GlobalState";
 
+import { GET_LATEST_PRODUCTS } from "../graphql/client/queries";
+
+import FadeIn from "react-fade-in/lib/FadeIn";
 const Home: NextPage = ({ data }: any) => {
-  const { products } = data;
+  const { latestProducts } = data;
 
   const { show } = useContext(GlobalContext);
-
-  console.log("show toast:" + show);
 
   const router = useRouter();
   return (
@@ -32,21 +33,22 @@ const Home: NextPage = ({ data }: any) => {
 
       <Layout>
         <Jumbotron />
-        <div className="flex items-center justify-between">
-          <ul className="flex items-center mt-5 mb-3">
+        <div className="flex items-center justify-between mt-5 mb-3">
+          <ul className="sm:flex sm:items-center ">
             <li className="text-2xl font-black text-indigo-600">Latest</li>
-            <li className="pl-4 text-slate-400 text-sm">Showing 9-9 results</li>
-            {/**<li className="pl-4 text-slate-400">Trending</li> */}
+            <li className="sm:pl-4 text-slate-400 text-sm">
+              Showing {latestProducts.length} results
+            </li>
           </ul>
           <button
             onClick={() => router.push("/shop")}
-            className="text-sm font-bold text-indigo-600 flex items-center hover:text-indigo-800"
+            className=" text-sm font-bold text-indigo-600 flex items-center hover:text-indigo-800"
           >
             All Products <CgArrowLongRight className="ml-1" fontSize={21} />
           </button>
         </div>
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4 mb-4 flex flex-wrap">
-          {products.map((product: any, idx: any) => (
+          {latestProducts.map((product: any, idx: any) => (
             <Card
               key={idx}
               id={product.id}
@@ -72,21 +74,7 @@ export async function getStaticProps() {
   });
 
   const { data } = await client.query({
-    query: gql`
-      query Query {
-        products {
-          id
-          name
-          price
-          description
-          quantity
-          image
-          Category {
-            name
-          }
-        }
-      }
-    `,
+    query: GET_LATEST_PRODUCTS,
   });
 
   return {

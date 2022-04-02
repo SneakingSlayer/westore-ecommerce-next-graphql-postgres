@@ -6,27 +6,16 @@ import { gql, useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
 import { Loader } from "../../src/components/loader/Loader";
 const cookieCutter = require("cookie-cutter");
+import { SIGN_IN } from "../../graphql/client/mutations";
 const Signin = () => {
   const router = useRouter();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const Login = gql`
-    mutation Mutation {
-      login(
-        username: "${username}"
-        password: "${password}"
-
-      ) {
-        username
-        password
-        token
-      }
-    }
-  `;
-
-  const [loginMutation, { data, loading }] = useMutation(Login);
+  const [loginMutation, { data, loading }] = useMutation(
+    SIGN_IN(username, password)
+  );
 
   const handleLogin = async (e: any) => {
     e.preventDefault();
