@@ -2,15 +2,26 @@ import React, { useState, useContext } from "react";
 import { Layout } from "../../src/components/layout/Layout";
 import { BiShoppingBag } from "react-icons/bi";
 import Head from "next/head";
-import { useRouter } from "next/router";
-import { ApolloClient, gql, InMemoryCache, useMutation } from "@apollo/client";
+import { Router, useRouter } from "next/router";
+import {
+  ApolloClient,
+  gql,
+  InMemoryCache,
+  useMutation,
+  useQuery,
+} from "@apollo/client";
 import { Loader } from "../../src/components/loader/Loader";
 import styles from "./product.module.css";
 import { Toast } from "../../src/components/toast/Toast";
 import { GlobalContext } from "../../src/context/GlobalState";
 import { ADD_TO_CART } from "../../graphql/client/mutations";
-import { GET_PRODUCT, GET_ALL_CART_ITEMS } from "../../graphql/client/queries";
+import {
+  GET_PRODUCT,
+  GET_ALL_CART_ITEMS,
+  AUTHENTICATION,
+} from "../../graphql/client/queries";
 const Product = ({ data }: any) => {
+  const router = useRouter();
   const { show, setToast } = useContext(GlobalContext);
 
   const [count, setCount] = useState<number>(1);
@@ -24,7 +35,7 @@ const Product = ({ data }: any) => {
     setCount(count - 1);
   };
 
-  const [addToCartMutation, { loading, error }] = useMutation(
+  const [addToCartMutation, { loading }] = useMutation(
     ADD_TO_CART(data, count),
     {
       refetchQueries: [
@@ -34,6 +45,8 @@ const Product = ({ data }: any) => {
       ],
     }
   );
+
+  const { error } = useQuery(AUTHENTICATION);
 
   return (
     <Layout>
@@ -96,6 +109,10 @@ const Product = ({ data }: any) => {
             <button
               onClick={(e) => {
                 e.preventDefault();
+                if (error) {
+                  router.push("/signin");
+                  return;
+                }
                 addToCartMutation();
                 setToast();
               }}

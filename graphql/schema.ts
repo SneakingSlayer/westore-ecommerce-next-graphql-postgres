@@ -59,6 +59,7 @@ export const typeDefs = gql`
 
   type Query {
     auth: Login!
+
     products: [Product]!
     latestProducts: [Product]!
     categories: [Category]!
@@ -77,7 +78,7 @@ export const typeDefs = gql`
     ): Register!
 
     login(password: String, username: String, token: String): Login!
-
+    logout: Login!
     addToCart(
       userId: String
       productId: String
