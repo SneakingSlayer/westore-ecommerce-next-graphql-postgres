@@ -4,6 +4,7 @@ import { gql, useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
 import { Loader } from "../../src/components/loader/Loader";
 import { SIGN_UP } from "../../graphql/client/mutations";
+import Link from "next/link";
 const Signup = () => {
   const router = useRouter();
 
@@ -154,12 +155,12 @@ const Signup = () => {
             <div className="text-sm">
               <p className="text-center">
                 Already have an account?{" "}
-                <a
-                  href="/signin"
-                  className="font-medium text-indigo-600 hover:text-indigo-700"
-                >
-                  Sign In here
-                </a>
+                <Link href="/signin">
+                  {" "}
+                  <a className="font-medium text-indigo-600 hover:text-indigo-700">
+                    Sign In here
+                  </a>
+                </Link>
               </p>
             </div>
           </form>

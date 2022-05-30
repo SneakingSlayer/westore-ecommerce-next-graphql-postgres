@@ -35,7 +35,7 @@ const Search = ({ data }: any) => {
           ))}
         </div>
       ) : (
-        <p>Sorry we could not find what you're looking for.</p>
+        <p>Sorry we could not find what you&apos;re looking for.</p>
       )}
     </Layout>
   );

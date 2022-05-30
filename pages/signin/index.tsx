@@ -121,7 +121,7 @@ const Signin = () => {
             </div>
             <div className="text-sm">
               <p className="text-center">
-                Don't have an account?{" "}
+                Don&apos;t have an account?{" "}
                 <a
                   href="/signup"
                   className="font-medium text-indigo-600 hover:text-indigo-700"
