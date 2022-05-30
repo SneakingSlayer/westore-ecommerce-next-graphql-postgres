@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import { Loader } from "../../src/components/loader/Loader";
 const cookieCutter = require("cookie-cutter");
 import { SIGN_IN } from "../../graphql/client/mutations";
+import Link from "next/link";
 const Signin = () => {
   const router = useRouter();
 
@@ -122,12 +123,11 @@ const Signin = () => {
             <div className="text-sm">
               <p className="text-center">
                 Don&apos;t have an account?{" "}
-                <a
-                  href="/signup"
-                  className="font-medium text-indigo-600 hover:text-indigo-700"
-                >
-                  Sign Up here
-                </a>
+                <Link href="/signup">
+                  <a className="font-medium text-indigo-600 hover:text-indigo-700">
+                    Sign Up here
+                  </a>
+                </Link>
               </p>
             </div>
           </form>
